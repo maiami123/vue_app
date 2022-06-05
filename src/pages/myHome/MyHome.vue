@@ -1,45 +1,40 @@
 <template>
   <div class="home">
     <div class="content">
-      <!--頭部-->
+      <!-- 頭部 -->
       <div class="header">
-        <div class="text">外送</div>
+        <div class="text">外賣</div>
         <div class="location">
-          <van-icon name="guide-o" />
-          <span>大阪市 Test區 5-13-32 999號</span>
-          <span> ></span>
+          <van-icon name="location" />
+          <span>大阪府大阪市東三國5-1-1</span>
+          <van-icon name="arrow" />
         </div>
       </div>
-
-      <!--主要內容-->
+      <!-- 主要內容 -->
       <div class="main">
         <div class="main_bg">
-
           <div class="search">
             <input type="text" />
-            <div class="search_text">搜尋</div>
+            <div class="search_text">搜索</div>
           </div>
-
           <div class="classify">
             <div class="big_classify">
-                <div v-for="(i,index) in big_classify" :key="index">
-                  <svg class="icon" aria-hidden="true">
+              <div v-for="(i, index) in big_classify" :key="index">
+                <svg class="icon" aria-hidden="true">
                   <use :xlink:href="`#${i.icon}`"></use>
-                  </svg>
-                {{i.name}}
-                </div>
+                </svg>
+                {{ i.name }}
+              </div>
             </div>
-
             <div class="small_classify">
-                <div v-for="(i,index) in small_classify" :key="index">
-                    <svg class="icon" aria-hidden="true">
+              <div v-for="(i, index) in small_classify" :key="index">
+                <svg class="icon" aria-hidden="true">
                   <use :xlink:href="`#${i.icon}`"></use>
-                  </svg>
-                {{i.name}}
-                </div>
+                </svg>
+                {{ i.name }}
+              </div>
             </div>
           </div>
-
         </div>
         <van-tabs class="van-tabs">
           <van-tab
@@ -58,16 +53,15 @@
 
 <script>
 import { reactive, toRefs } from '@vue/reactivity';
-import Footer from "../../components/FooterShow.vue";
-import Store from './components/Store.vue';
+import Footer from "../../components/Footer.vue";
+import Store from "./components/Store.vue";
 
 export default {
   components: {
     Footer,
     Store,
   },
-  setup(){
-
+  setup() {
     let data = reactive({
       big_classify: [
         { name: "美食", icon: "icon-apple-and-pear" },

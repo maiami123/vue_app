@@ -7,7 +7,7 @@
 
 <script>
 
-import Footer from '../../components/FooterShow.vue'
+import Footer from '../../components/Footer.vue'
 
 export default {
 components:{
