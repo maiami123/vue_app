@@ -1,18 +1,54 @@
 <template>
   <div class="order">
-    <div class="content">買很多東西喔</div>
-    <Footer/>
+    <Header title="訂單" />
+    <div class="content">
+      <van-tabs color="#ffc400">
+        <van-tab v-for="i in navData" :title="i" :key="i">
+          <div 
+            v-for="i in store.state.orderListed" 
+            v-if="i === '全部' && store.state.orderListed?.length"
+            :key="i"
+          >
+            <van-card
+              :num="i.num"
+              :price="i.price"
+              :title="i.title"
+              :thumb="i.pic"
+            />
+          </div>
+          <Blank v-else />
+        </van-tab>
+      </van-tabs>
+    </div>
+    <Footer />
   </div>
 </template>
 
 <script>
-
-import Footer from '../../components/Footer.vue'
+import { reactive, toRefs } from "vue";
+import Footer from "../../components/Footer.vue";
+import Header from "../../components/Header.vue";
+import Blank from "../../components/Blank.vue";
+import { useStore } from "vuex";
 
 export default {
-components:{
-  Footer,
-}};
+  components: {
+    Footer,
+    Header,
+    Blank,
+  },
+  setup() {
+    const store = useStore();
+    let data = reactive({
+      navData: ["全部", "交易完成", "待付款", "待發貨", "已發貨"],
+    });
+
+    return {
+      ...toRefs(data),
+      store,
+    };
+  },
+};
 </script>
 
 <style lang='less' scoped>

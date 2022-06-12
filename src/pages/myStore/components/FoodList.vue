@@ -1,9 +1,9 @@
 <template>
   <div class="food_list" v-if="index === 0">
     <van-tree-select
-      v-model:main-active-index="activeIndex"
       height="88vw"
       :items="items"
+      :v-model="active"
       @click-nav="navClick"
     >
       <template #content>
@@ -22,19 +22,21 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "@vue/reactivity";
+import { reactive, toRefs } from "vue";
 import FoodAdd from "../../../components/FoodAdd.vue";
-
 export default {
-  components: { FoodAdd },
   props: ["index", "foodData"],
+  components: {
+    FoodAdd,
+  },
   setup(props) {
     let data = reactive({
-      activeIndex: 0,
+      active: 0,
       items: [],
       subItem: [],
     });
 
+    // 數據的初始化
     const init = () => {
       let newList = [];
       props.foodData?.items?.map((i, index) => {
@@ -47,12 +49,13 @@ export default {
     };
     init();
 
-
+    // 點擊左側的導航
     const navClick = (i) => {
       data.active = i;
       init();
     };
 
+    // 切換步進器
     const addClick = (i) => {
       data.subItem.forEach((item) => {
         if (item.id === i) {
@@ -62,6 +65,7 @@ export default {
       });
     };
 
+    // 步進器增加觸發事件
     const onChange = (value, detail) => {
       data.subItem.forEach((item) => {
         if (item.id === detail.name) {
@@ -80,7 +84,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang='less' scoped>
 .food_list {
   margin-top: 20px;
   .item_bg {

@@ -17,12 +17,12 @@
         </div>
       </div>
     </div>
+
     <van-action-bar>
       <van-action-bar-icon icon="chat-o" text="客服" @click="service" />
       <van-action-bar-icon
         icon="cart-o"
         text="購物車"
-
         :badge="store.state.cartList.length"
         @click="toCart"
       />
@@ -38,11 +38,12 @@
 
 <script>
 import Header from "../../components/Header.vue";
-import { reactive, toRefs } from "vue";
-import FoodList from "./components/FoodList.vue";
+import { onMounted, reactive, toRefs } from "vue";
+import FoodList from "./components/FoodList";
 import { Toast } from "vant";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { getStoreData } from "../../request/api";
 
 export default {
   components: {
@@ -51,89 +52,32 @@ export default {
   },
 
   setup() {
-
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
     let data = reactive({
-      title: "魚拿酸菜魚",
-      img: "https://img1.baidu.com/it/u=1599947592,1695977044&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=440",
-      storeData: [
-        {
-          name: "點菜",
-          data: {
-            content: "點菜",
-            items: [
-              {
-                text: "熱銷套餐",
-                children: [
-                  {
-                    pic: "https://img1.baidu.com/it/u=1599947592,1695977044&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=440",
-                    title: "招牌酸菜魚",
-                    num: 0,
-                    price: 25.0,
-                    id: 0,
-                    add: true,
-                  },
-                  {
-                    pic: "https://img1.baidu.com/it/u=1599947592,1695977044&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=440",
-                    title: "藤椒酸菜魚",
-                    num: 0,
-                    price: 25.0,
-                    id: 1,
-                    add: true,
-                  },
-                ],
-              },
-              {
-                text: "澳洲肥牛",
-                children: [
-                  {
-                    pic: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbkimg.cdn.bcebos.com%2Fpic%2F8694a4c27d1ed21b0ef4f3137f24cac451da80cb91b8&refer=http%3A%2F%2Fbkimg.cdn.bcebos.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1645407747&t=ea2c9f772ba0df3a2d1b00b962875460",
-                    title: "酸湯肥牛",
-                    num: 0,
-                    price: 25.0,
-                    id: 3,
-                    add: true,
-                  },
-                  {
-                    pic: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbkimg.cdn.bcebos.com%2Fpic%2F8694a4c27d1ed21b0ef4f3137f24cac451da80cb91b8&refer=http%3A%2F%2Fbkimg.cdn.bcebos.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1645407747&t=ea2c9f772ba0df3a2d1b00b962875460",
-                    title: "香辣肥牛",
-                    num: 0,
-                    price: 25.0,
-                    id: 4,
-                    add: true,
-                  },
-                ],
-              },
-              {
-                text: "超級折扣",
-                children: [
-                  {
-                    pic: "https://img1.baidu.com/it/u=1599947592,1695977044&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=440",
-                    title: "無骨酸菜魚+肥牛雙拼",
-                    num: 0,
-                    price: 25.0,
-                    id: 5,
-                    add: true,
-                  },
-                  {
-                    pic: "https://img1.baidu.com/it/u=1599947592,1695977044&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=440",
-                    title: "香辣水煮魚+肥牛雙拼",
-                    num: 0,
-                    price: 25.0,
-                    id: 6,
-                    add: true,
-                  },
-                ],
-              },
-            ],
-          },
-        },
-        { name: "評價", data: { content: "評價" } },
-        { name: "商家", data: { content: "商家" } },
-      ],
+      storeData: [],
+      title: "",
+      img: "",
     });
-
+    // 數據的請求
+    const getStore = () => {
+      getStoreData().then((res) => {
+        if (res.status === 200 && res.data.code === 0) {
+          res.data.data.forEach((i) => {
+            console.log(route.query.title, i.title);
+            if (i.title === route.query.title) {
+              data.title = i.title;
+              data.img = i.img;
+              data.storeData = i.storeData;
+            }
+          });
+        }
+      });
+    };
+    onMounted(() => {
+      getStore();
+    });
     // 客服的點擊
     const service = () => {
       Toast.fail("敬請期待...");

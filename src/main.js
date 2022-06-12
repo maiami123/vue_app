@@ -5,9 +5,12 @@ import {
   Card,
   Button,
   Icon,
+  Form,
+  Field,
   Tab,
   Tabs,
   Toast,
+  Dialog,
   TreeSelect,
   Stepper,
   ActionBarButton,
@@ -16,6 +19,8 @@ import {
   Checkbox,
   CheckboxGroup,
   SubmitBar,
+  AddressList,
+  AddressEdit,
   ContactCard,
 } from 'vant';
 import router from './router/index';
@@ -25,7 +30,12 @@ import store from './store';
 const app = createApp(App);
 
 app
+  .use(Form)
+  .use(Field)
   .use(Button)
+  .use(AddressList)
+  .use(AddressEdit)
+  .use(Dialog)
   .use(Card)
   .use(Icon)
   .use(Toast)

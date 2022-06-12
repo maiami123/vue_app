@@ -39,19 +39,33 @@
 import Header from "../../components/Header.vue";
 import { toRefs, reactive, onMounted } from "vue";
 import { useStore } from "vuex";
+import { useRoute, useRouter } from 'vue-router';
+import { Dialog } from 'vant';
 export default {
   components: {
     Header,
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
+    const route = useRoute();
     let data = reactive({
       currentContact: {
-        name: "田中",
-        tel: "12345678911",
+        name: "",
+        tel: "",
       },
       allPrice: 0,
     });
+
+    // 用户資訊初始化
+    const initUser = () => {
+      store.state.userAddress.forEach((item) => {
+        if (item.isDefault) {
+          data.currentContact.name = item.name;
+          data.currentContact.tel = item.tel;
+        }
+      });
+    };
 
     const initPrice = () => {
       let price = 0;
@@ -64,13 +78,28 @@ export default {
     };
     onMounted(() => {
       initPrice();
+      initUser();
     });
 
     //地址編輯按鈕
-    const onEdit = () => {};
+    const onEdit = () => {
+      router.push('./address')
+    };
 
     // 生成訂單按鈕
-    const handleCreateOrder = () => {};
+    const handleCreateOrder = () => {
+      Dialog.alert({
+        title: "提示",
+        message: "恭喜！您的訂單已完成",
+      }).then(() => {
+        let newList = store.state.cartList.filter((item) => {
+          return !route.query.list.includes(item.id + "");
+        });
+        store.commit("DELETE", newList);
+        store.commit("UPDATEORDER");
+        router.push("./order");
+      });
+    };
     return {
       ...toRefs(data),
       onEdit,

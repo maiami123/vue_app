@@ -1,11 +1,11 @@
 <template>
-  <div class="item" @click="toStore">
-    <img src="../../../assets/11.jpg" alt="" />
+  <div class="item" @click="toStore(item)">
+    <img :src="item.pic" alt="" />
     <div class="item_right">
       <div class="title">{{ item.title }}</div>
       <div class="sales">{{ item.sales }}</div>
-      <div class="price">外送費＄{{ item.price }}</div>
-      <div class="lable">
+      <div class="price">起送費 ￥{{ item.sales }} 免配送費</div>
+      <div class="label">
         <div v-for="(i, index) in item.label" :key="index">{{ i }}</div>
       </div>
     </div>
@@ -18,8 +18,8 @@ export default {
   props: ["item"],
   setup() {
     const router = useRouter();
-    const toStore = () => {
-      router.push("./store");
+    const toStore = (item) => {
+      router.push({ path: "./store", query: { title: item.title } });
     };
     return {
       toStore,
@@ -28,7 +28,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang='less' scoped>
 .item:not(:first-child) {
   margin-top: 10px;
 }
